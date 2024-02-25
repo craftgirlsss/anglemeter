@@ -214,8 +214,10 @@ class _DraggablePolarCoordGraphState extends State<DraggablePolarCoordGraph> {
   final double _touchDotRadius = 200;
 
   Offset? _startDragTouchVector;
+  Offset? _startDragTouchImage;
   PolarCoord? _startDragPolarCoord;
   Offset? _currentDragTouchVector;
+  Offset? _currentDragTouchImage;
   double? zoom;
   double? previousZoom;
   Offset? previousOffset;
@@ -251,6 +253,21 @@ class _DraggablePolarCoordGraphState extends State<DraggablePolarCoordGraph> {
       zoom = 1.0;
       offset = Offset.zero;
       position = Offset.zero;
+    });
+  }
+
+  // image drag start awal coba
+  void _onDragImageStart(DragStartDetails details) {
+    _startDragTouchImage = details.localPosition;
+  }
+
+  // image drag update coba
+  void _onDragImageUpdate(details) {
+    _currentDragTouchImage = details.localPosition;
+    final dragDeltaOffset = _currentDragTouchImage! - _startDragTouchImage!;
+    final dragDeltaPoint = Point(dragDeltaOffset.dx, dragDeltaOffset.dy);
+    setState(() {
+      dragDeltaPoint;
     });
   }
 
@@ -355,6 +372,14 @@ class _DraggablePolarCoordGraphState extends State<DraggablePolarCoordGraph> {
           color: Colors.transparent,
         ),
       ),
+    );
+  }
+
+  Widget _buildDragTouchTargetImage() {
+    return GestureDetector(
+      onPanStart: _onDragImageStart,
+      onPanUpdate: _onDragImageUpdate,
+      child: Container(),
     );
   }
 }
